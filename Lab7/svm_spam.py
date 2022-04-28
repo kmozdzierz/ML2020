@@ -58,7 +58,7 @@ print('\nExtracting features from sample email (emailSample1.txt)\n')
 # Extract Features
 file_contents = read_file('data/emailSample1.txt')
 word_indices = process_email(file_contents)
-features = email_features(word_indices)
+features = email_features(word_indices).reshape(1, -1)
 
 # Print Stats
 print('Length of feature vector: {}\n'.format(len(features[0])))
@@ -98,17 +98,17 @@ print('Training Accuracy: {:.2f}%\n'.format(acc_train * 100))
 # %% =================== Part 4: Test Spam Classification ================
 #  After training the classifier, we can evaluate it on a test set.
 
-# FIXME: Load the test dataset ('data/spamTest_X.csv', 'data/spamTest_y.csv').
+# DONE: Load the test dataset ('data/spamTest_X.csv', 'data/spamTest_y.csv').
 # You will have Xtest, ytest in your environment
 X_test = np.genfromtxt('data/spamTest_X.csv', delimiter=',')
 y_test = np.genfromtxt('data/spamTest_y.csv', delimiter=',')
 
 print('\nEvaluating the trained Linear SVM on a test set ...\n')
 
-# FIXME: Predict the labelling.
+# DONE: Predict the labelling.
 y_pred = clf.predict(X_test)
 
-# FIXME: Compute the training accuracy.
+# DONE: Compute the training accuracy.
 acc_test = accuracy_score(y_test, y_pred)
 print('Test Accuracy: {:.2f}%\n'.format(acc_test * 100))
 
@@ -122,22 +122,22 @@ print('Test Accuracy: {:.2f}%\n'.format(acc_test * 100))
 #  the highest weights in the classifier. Informally, the classifier
 #  'thinks' that these words are the most likely indicators of spam.
 
-# FIXME: Print the list of 15 most prominent features.
+# DONE: Print the list of 15 most prominent features.
 # (i.e. words which gives strongest evidence for an email being a spam)
 # - Obtain the weights of the SVC model.
 # - Obtain the indices that would sort the weights in the descending order.
 # - Obtain the vocabulary.
 
-weights = None
-idx = None
+weights = clf.coef_[0]
+idx = np.argsort(weights)[::-1]
 
-vocabulary_dict = None
+vocabulary_dict = get_vocabulary_dict()
 
 print('\nTop predictors of spam: \n')
 for i in range(15):
-    # FIXME: Replace each `None` with an appropriate expression.
+    # DONE: Replace each `None` with an appropriate expression.
     print(' {word:<20}: {weight:10.6f}'.format(
-        word=None, weight=None))
+        word=vocabulary_dict[idx[i]], weight=weights[idx[i]]))
 
 print('\n\n')
 # input('\nProgram paused. Press enter to continue.\n')
@@ -153,14 +153,14 @@ print('\n\n')
 # Set the file to be read in (change this to spamSample2.txt,
 # emailSample1.txt or emailSample2.txt to see different predictions on
 # different emails types). Try your own emails as well!
-filename = 'data/spamSample1.txt'
+filename = 'data/spamSample2.txt'
 
 # Read and predict
 file_contents = read_file(filename)
 word_indices = process_email(file_contents)
-x = email_features(word_indices)
-# FIXME: Predict the labelling.
-y_pred = None
+x = email_features(word_indices).reshape(1, -1)
+# DONE: Predict the labelling.
+y_pred = clf.predict(x)
 
 print('\nProcessed {}\n\nSpam Classification: {}\n'.format(filename, y_pred[0] > 0))
 print('(1 indicates spam, 0 indicates not spam)\n\n')

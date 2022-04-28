@@ -53,6 +53,10 @@ def email_features(word_indices: List[int]) -> np.ndarray:
     #
     # =========================================================================
 
-    raise NotImplementedError()
+    bin_feature_vector = np.zeros(n_words)
+    for idx in word_indices:
+        bin_feature_vector[idx] = 1
+    
+    return bin_feature_vector
 
     # =========================== END OF YOUR CODE ============================

@@ -16,11 +16,11 @@ def process_email(email_contents: str) -> List[int]:
     :return: a list of indices of the words contained in the email
     """
 
-    # FIXME: Load the vocabulary.
-    vocabulary_dict = None
+    # DONE: Load the vocabulary.
+    vocabulary_dict = get_vocabulary_dict()
 
-    # FIXME: Initialize the return value.
-    word_indices = None
+    # DONE: Initialize the return value.
+    word_indices = list()
 
     # ========================== Preprocess Email ===========================
 
@@ -32,29 +32,29 @@ def process_email(email_contents: str) -> List[int]:
     # header_start = email_contents.find(header_token)
     # email_contents = email_contents[header_start+len(header_token):]
 
-    # FIXME: Convert email content to lower case.
-    email_contents = email_contents
+    # DONE: Convert email content to lower case.
+    email_contents = email_contents.lower()
 
     # Strip all HTML
     # Looks for any expression that starts with < and ends with > and replace
     # and does not have any < or > in the tag it with a space
-    email_contents = re.sub('<[^<>]+>', ' ', email_contents)
+    email_contents = re.sub(r'<[^<>]+>', ' ', email_contents)
 
-    # FIXME: Handle numbers.
+    # DONE: Handle numbers.
     # Convert all sequences of digits (0-9) to a 'number' token.
-    email_contents = re.sub('FIXME', 'number', email_contents)
+    email_contents = re.sub(r'\d+', 'number', email_contents)
 
-    # FIXME: Handle URLs.
+    # DONE: Handle URLs.
     # Convert all strings starting with http:// or https:// to a 'httpaddr' token.
-    email_contents = re.sub('FIXME', 'httpaddr', email_contents)
+    email_contents = re.sub(r'http:\/\/.*|https:\/\/.*', 'httpaddr', email_contents)
 
-    # FIXME: Handle email addresses.
+    # DONE: Handle email addresses.
     # Convert all strings with @ in the middle to a 'emailaddr' token.
-    email_contents = re.sub('FIXME', 'emailaddr', email_contents)
+    email_contents = re.sub(r'.*@.*', 'emailaddr', email_contents)
 
-    # FIXME: Handle $ sign
+    # DONE: Handle $ sign
     # Convert all sequences of $ signs to a 'dollar' token.
-    email_contents = re.sub('FIXME', 'dollar', email_contents)
+    email_contents = re.sub(r'$', 'dollar', email_contents)
 
     # ========================== Tokenize Email ===========================
 
@@ -66,6 +66,8 @@ def process_email(email_contents: str) -> List[int]:
 
     # Tokenize and also get rid of any punctuation
     tokens = re.split('[ @$/#.-:&*\+=\[\]?!\(\)\{\},''">_<;#\n\r]', email_contents)
+
+    vocab_to_index_dict = {value : key for key, value in vocabulary_dict.items()}
 
     for token in tokens:
 
@@ -100,8 +102,10 @@ def process_email(email_contents: str) -> List[int]:
         # Note: You can use strcmp(str1, str2) to compare two strings (str1 and
         #       str2). It will return 1 only if the two strings are equivalent.
         #
+        
+        if token in list(vocabulary_dict.values()):
 
-        raise NotImplementedError()
+            word_indices.append(vocab_to_index_dict[token])
 
         # ========================= END OF YOUR CODE ==========================
 
