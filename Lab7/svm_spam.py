@@ -1,5 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+
+### Machine Learning 2022
+### Lab. 7 - SVM
+### Imię i nazwisko: Kacper Mozdzierz
+### Nr albumu: 401733
+### Data: 26.04.2022
+
+### Grupa: wtorek 9:30 - 11:00
+
 from warnings import catch_warnings
 import numpy as np
 from sklearn import svm
